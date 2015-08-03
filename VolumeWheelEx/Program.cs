@@ -12,7 +12,7 @@ static class Program {
         if(isFirstInstance) {
 
             Hook.SetHook();
-            WinAPI.GetMessage(IntPtr.Zero, IntPtr.Zero, 0, 0);
+            while(WinAPI.GetMessage(IntPtr.Zero, IntPtr.Zero, 0, 0) > 0) { };
             Hook.UnHook();
             mutex.ReleaseMutex();
 
