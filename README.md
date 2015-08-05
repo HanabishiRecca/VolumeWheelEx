@@ -7,3 +7,7 @@ Application has no interface. To close app just run executable again.
 Контроль громкости на Alt+Колесо мыши.
 Alt+Нажатие колеса = включить\выключить звук.
 Приложение не имеет интерфейса. Для завершения приложения достаточно запустить исполняемый файл снова.
+
+---------------------------------------------------------------------
+=== Download binary link ===
+http://www.mediafire.com/download/9pd1dpsadxf5oqz/VolumeWheelEx.exe
