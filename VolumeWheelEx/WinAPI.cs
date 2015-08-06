@@ -41,4 +41,7 @@ public static class WinAPI {
 
     [DllImport("user32.dll")]
     public static extern bool PostThreadMessage(uint threadId, uint msg, UIntPtr wParam, IntPtr lParam);
+
+    [DllImport("user32.dll")]
+    public static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode, int wParam, IntPtr lParam);
 }

@@ -33,7 +33,7 @@ static class Hook {
             }
             
         }
-        return IntPtr.Zero;
+        return WinAPI.CallNextHookEx(IntPtr.Zero, code, wParam, lParam); ;
     }
     
 }
