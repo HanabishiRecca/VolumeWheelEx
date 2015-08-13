@@ -8,26 +8,34 @@ static class Program {
 
         bool isFirstInstance;
         var mutex = new Mutex(true, "VolumeWheelEx", out isFirstInstance);
-        
+
         if(isFirstInstance) {
 
-            Hook.SetHook();
-            while(WinAPI.GetMessage(IntPtr.Zero, IntPtr.Zero, 0, 0) > 0) { };
-            Hook.UnHook();
-            mutex.ReleaseMutex();
+            try {
+                Hook.SetHook();
+                var exit = false;
+                while(!exit) { try { exit = WinAPI.GetMessage(IntPtr.Zero, IntPtr.Zero, 0, 0) > 0; } catch(NullReferenceException) { /* Don't worry, GetMessage can sometimes returns NULL. */ } };
+                Hook.UnHook();
+            } catch(Exception e) {
+                //LOG file directly on desktop
+                System.IO.File.AppendAllText(Environment.GetEnvironmentVariable("userprofile") + "\\Desktop\\VolumeWheelEx.log", "[" + DateTime.Now.ToString() + "]\n" + e.Source + " -> " + e.ToString() + "\n" + e.StackTrace + "\n\n");
+            } finally {
+                mutex.ReleaseMutex();
+            }
 
         } else {
 
-            var thisProc = Process.GetCurrentProcess();
-            var prcs = Process.GetProcessesByName(thisProc.ProcessName);
-            for(int i = 0; i < prcs.Length; i++) {
-                if(prcs[i].Id != thisProc.Id) {
-                    WinAPI.PostThreadMessage((uint)prcs[i].Threads[0].Id, WinAPI.WM_QUIT, UIntPtr.Zero, IntPtr.Zero);
+            try {
+                var thisProc = Process.GetCurrentProcess();
+                var prcs = Process.GetProcessesByName(thisProc.ProcessName);
+                for(int i = 0; i < prcs.Length; i++) {
+                    if(prcs[i].Id != thisProc.Id) {
+                        WinAPI.PostThreadMessage((uint)prcs[i].Threads[0].Id, WinAPI.WM_QUIT, UIntPtr.Zero, IntPtr.Zero);
+                    }
                 }
-            }
+            } catch { }
 
         }
-        
     }
 
     public static void VolumeUp() {
